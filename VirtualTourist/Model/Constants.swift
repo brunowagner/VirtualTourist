@@ -17,4 +17,8 @@ struct Constants {
     struct SegueWayID {
         static let mapToPhotos = "segueMapToPhotos"
     }
+    
+    struct UserDefaultsKeys {
+        static let regionPreference = "RegionMap"
+    }
 }
