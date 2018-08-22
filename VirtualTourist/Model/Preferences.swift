@@ -18,68 +18,48 @@ class Preferences{
     private var latDelta : Double!
     private var longDelta : Double!
     
-    private var locationData : [String : Double]!
+    private var splittedRegionsDataDictionary : [String : Double]!
 
     func save(){
-//        let pref = Preferences.sharedInstance()
-//        let preferencesData = NSKeyedArchiver.archivedData(withRootObject: pref)
-//        UserDefaults.standard.set(preferencesData, forKey: Constants.UserDefaultsKeys.regionPreference)
-
-//        let regionData = NSKeyedArchiver.archivedData(withRootObject: region)
-//        UserDefaults.standard.set(regionData, forKey: Constants.UserDefaultsKeys.regionPreference)
-        
         guard (region != nil) else{
             print("region nil. Did not saved!")
             return
         }
-        
         latitude = region.center.latitude
         longitude = region.center.longitude
         latDelta = region.span.latitudeDelta
         longDelta = region.span.longitudeDelta
         
-        locationData = [
+        splittedRegionsDataDictionary = [
             "latidude" : latitude,
             "longitude" : longitude,
             "latidudeDelta" : latDelta,
             "longitudeDelta" : longDelta
         ]
         
-        UserDefaults.standard.set(locationData, forKey: Constants.UserDefaultsKeys.regionPreference)
+        UserDefaults.standard.set(splittedRegionsDataDictionary, forKey: Constants.UserDefaultsKeys.regionPreference)
         print ("Preferences saved!")
     }
     
-    fileprivate func setLocationData( locationDictyonary: [String : Double]) {
-        latitude = locationDictyonary["latidude"]
-        longitude = locationDictyonary["longitude"]
-        latDelta = locationDictyonary["latidudeDelta"]
-        longDelta = locationDictyonary["longitudeDelta"]
+    fileprivate func setCoordinates() {
+        latitude = splittedRegionsDataDictionary["latidude"]
+        longitude = splittedRegionsDataDictionary["longitude"]
+        latDelta = splittedRegionsDataDictionary["latidudeDelta"]
+        longDelta = splittedRegionsDataDictionary["longitudeDelta"]
     }
     
     func fetch(){
-//        if let loadedData = UserDefaults.standard.data(forKey: Constants.UserDefaultsKeys.regionPreference) {
-//            if let loadedPreferences = NSKeyedUnarchiver.unarchiveObject(with: loadedData) as? Preferences{
-//                self.region = loadedPreferences.region
-//                print("Preferences fetched!")
-//            }
-//        }
-//        if let loadedData = UserDefaults.standard.data(forKey: Constants.UserDefaultsKeys.regionPreference) {
-//            if let loadedRegion = NSKeyedUnarchiver.unarchiveObject(with: loadedData) as? MKCoordinateRegion{
-//                self.region = loadedRegion
-//                print("Preferences fetched!")
-//            }
-//        }
         
         if let fetchedLocation = UserDefaults.standard.dictionary(forKey: Constants.UserDefaultsKeys.regionPreference) as? [String : Double]{
-            self.locationData = fetchedLocation
+            self.splittedRegionsDataDictionary = fetchedLocation
         }
         
-        guard self.locationData != nil  else {
+        guard self.splittedRegionsDataDictionary != nil  else {
             print ("Region nil. Did not fetched!")
             return
         }
         
-        setLocationData(locationDictyonary: self.locationData)
+        setCoordinates()
         
         let coordinates = CLLocationCoordinate2DMake(latitude , longitude )
         let span = MKCoordinateSpanMake(latDelta , longDelta )
