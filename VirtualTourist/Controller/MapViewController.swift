@@ -41,6 +41,7 @@ class MapViewController: UIViewController {
     }
     
     // se fosse adicionar um pino com o endereço como título
+    // esta função não está sendo usada!
     @objc func addAnnotation(gestureRecognizer:UIGestureRecognizer){
         if gestureRecognizer.state == UIGestureRecognizerState.began {
             let touchPoint = gestureRecognizer.location(in: mapView)
@@ -122,10 +123,20 @@ extension MapViewController: MKMapViewDelegate{
         return pinView
     }
     
+    // This delegate method is implemented to respond to taps. It go to PhotoViewController
+    // to the URL specified in the annotationViews subtitle property.
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        if control == view.rightCalloutAccessoryView {
+            let photosViewController = storyboard?.instantiateViewController(withIdentifier: Constants.StoryboardID.photosViewController)
+            navigationController?.pushViewController(photosViewController!, animated: true)
+        }
+    }
+    
+    /*
+     This delegate's functions is called when de region on MapView is changed
+     */
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         Preferences.sharedInstance().region = mapView.region
         Preferences.sharedInstance().save()
     }
-    
-    
 }
