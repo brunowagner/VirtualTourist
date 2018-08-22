@@ -41,6 +41,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="OK" id="51F-Gi-uzn"/>
                     <connections>
+                        <outlet property="mapView" destination="XB7-Q1-ISc" id="i0d-cV-ooE"/>
                         <segue destination="ZXw-jf-NTl" kind="show" identifier="segueMapToPhotos" id="RFV-E1-CCi"/>
                     </connections>
                 </viewController>

@@ -8,13 +8,29 @@
 import Foundation
 import CoreData
 import UIKit
+import MapKit
 
-class MapViewController: UIViewController {
+class MapViewController: UIViewController, MKMapViewDelegate {
+    
+    @IBOutlet weak var mapView : MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        mapView.delegate = self
+        
+        if let region = Preferences.sharedInstance().region{
+            mapView.region = region
+            print ("Region resoursed!")
+            print (region)
+        }
 
-        // Do any additional setup after loading the view.
+        
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        Preferences.sharedInstance().region = mapView.region
+        Preferences.sharedInstance().save()
     }
 
 

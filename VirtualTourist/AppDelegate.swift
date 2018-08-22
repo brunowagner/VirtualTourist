@@ -52,8 +52,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func checkIfFirstLaunch(){
         if UserDefaults.standard.bool(forKey: "HasLaunchedBefore") {
+            print ("No first launche")
             Preferences.sharedInstance().fetch()
         }else{
+            print("First launche")
             UserDefaults.standard.set(true, forKey: "HasLaunchedBefore")
             Preferences.sharedInstance().region = nil
             Preferences.sharedInstance().save()
