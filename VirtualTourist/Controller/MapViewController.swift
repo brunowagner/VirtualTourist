@@ -10,14 +10,14 @@ import CoreData
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController {
+class MapViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var mapView : MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        mapView.delegate = self
+        self.mapView.delegate = self
         
         if let region = Preferences.sharedInstance().region{
             mapView.region = region
@@ -26,18 +26,24 @@ class MapViewController: UIViewController {
         }
         
         //add longPress (permite executar uma funcao apos "clicar" e "segurar" um local no mapa)
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(addPin))
+        //let longPress = UILongPressGestureRecognizer(target: self, action: #selector(addPin(gestureRecognizer:)))
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(addPin(gestureRecognizer:)))
+        //longPress.minimumPressDuration = 1.5
         mapView.addGestureRecognizer(longPress)
 
         
     }
     
+    
     @objc func addPin(gestureRecognizer:UIGestureRecognizer){
-        let touchPoint = gestureRecognizer.location(in: mapView)
-        let newCoordinates = mapView.convert(touchPoint, toCoordinateFrom: mapView)
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = newCoordinates
-        mapView.addAnnotation(annotation)
+        //esta verificação é necessária pois o longPress aciona esta método multiplas vezes e multiplos pinos seriam "dropados"
+        if gestureRecognizer.state == .began{
+            let touchPoint = gestureRecognizer.location(in: mapView)
+            let newCoordinates = mapView.convert(touchPoint, toCoordinateFrom: mapView)
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = newCoordinates
+            mapView.addAnnotation(annotation)
+        }
     }
     
     // se fosse adicionar um pino com o endereço como título
@@ -98,22 +104,41 @@ class MapViewController: UIViewController {
         navigationController?.pushViewController(photosViewController!, animated: true)
     }
 
-}
+    
 
-extension MapViewController: MKMapViewDelegate{
+    
+
+    
+    
+    
     // MARK: - MKMapViewDelegate
+    
+    // This delegate method is implemented to respond to taps. It go to PhotoViewController
+    // to the URL specified in the annotationViews subtitle property.
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        print("pin tapped callout!")
+        if control == view.rightCalloutAccessoryView {
+            let photosViewController = storyboard?.instantiateViewController(withIdentifier: Constants.StoryboardID.photosViewController)
+            navigationController?.pushViewController(photosViewController!, animated: true)
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        let photosViewController = storyboard?.instantiateViewController(withIdentifier: Constants.StoryboardID.photosViewController)
+        navigationController?.pushViewController(photosViewController!, animated: true)
+    }
     
     // Here we create a view with a "right callout accessory view". You might choose to look into other
     // decoration alternatives. Notice the similarity between this method and the cellForRowAtIndexPath
     // method in TableViewDataSource.
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let reuseId = "pin"
-        
+
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
-        
+
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-            pinView!.canShowCallout = true
+            pinView!.canShowCallout = false
             pinView!.pinTintColor = .red
             pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
         }
@@ -123,14 +148,7 @@ extension MapViewController: MKMapViewDelegate{
         return pinView
     }
     
-    // This delegate method is implemented to respond to taps. It go to PhotoViewController
-    // to the URL specified in the annotationViews subtitle property.
-    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        if control == view.rightCalloutAccessoryView {
-            let photosViewController = storyboard?.instantiateViewController(withIdentifier: Constants.StoryboardID.photosViewController)
-            navigationController?.pushViewController(photosViewController!, animated: true)
-        }
-    }
+
     
     /*
      This delegate's functions is called when de region on MapView is changed
