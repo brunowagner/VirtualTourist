@@ -7,13 +7,23 @@
 //
 
 import UIKit
+import MapKit
 
 class PhotosViewController: UIViewController {
+    
+    var annotation : MKAnnotation!
+    
+    @IBOutlet weak var mapView : MKMapView!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        mapView.addAnnotation(annotation)
+        let span = MKCoordinateSpanMake(0.1, 0.1)
+        let region = MKCoordinateRegionMake(annotation.coordinate, span)
+        mapView.region = region
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,3 +43,6 @@ class PhotosViewController: UIViewController {
     */
 
 }
+//extension PhotosViewController: MKMapViewDelegate{
+//
+//}

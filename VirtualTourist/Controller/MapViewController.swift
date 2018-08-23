@@ -124,8 +124,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        let photosViewController = storyboard?.instantiateViewController(withIdentifier: Constants.StoryboardID.photosViewController)
-        navigationController?.pushViewController(photosViewController!, animated: true)
+        let photosViewController = storyboard?.instantiateViewController(withIdentifier: Constants.StoryboardID.photosViewController) as! PhotosViewController
+
+        photosViewController.annotation = view.annotation
+        navigationController?.pushViewController(photosViewController, animated: true)
+        
+        
     }
     
     // Here we create a view with a "right callout accessory view". You might choose to look into other
