@@ -8,16 +8,23 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 class PhotosViewController: UIViewController {
     
-    var annotation : MKAnnotation!
+    //var annotation : MKAnnotation!
+    
+    var pin : Pin!
+    
+    var fetchedResultsController : NSFetchedResultsController<Photo>!
     
     @IBOutlet weak var mapView : MKMapView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        mapView.delegate = self
         addPin()
+        setupFetchedResultsController()
     }
 
     override func didReceiveMemoryWarning() {
@@ -26,11 +33,40 @@ class PhotosViewController: UIViewController {
     }
     
     fileprivate func addPin() {
-        mapView.delegate = self
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate.latitude = pin.latitude
+        annotation.coordinate.longitude = pin.longitude as! CLLocationDegrees
+        
+        
+            
+        
         mapView.addAnnotation(annotation)
         let span = MKCoordinateSpanMake(0.001, 0.001)
         let region = MKCoordinateRegionMake(annotation.coordinate, span)
         mapView.region = region
+    }
+    
+    func setupFetchedResultsController(){
+        //Create a fetchRequest (like "SELECT * FROM PHOTO")
+        let fetchRequest : NSFetchRequest<Photo> = Photo.fetchRequest()
+        //Create a predicate (like: "WHERE ... ")
+        let predicate = NSPredicate(format: "notebook == %@", pin)
+        
+        //Add predicate at fetchRequest
+        fetchRequest.predicate = predicate
+        
+        fetchedResultsController = NSFetchedResultsController<Photo>(fetchRequest: fetchRequest, managedObjectContext: DataController.sharedInstance().viewContext, sectionNameKeyPath: nil, cacheName: "\(pin.latitude) / \(String(describing: pin.longitude))")
+        
+        //TO DO: set fetchedResultsController delegate
+        //fetchedResultsController.delegate =
+        
+        do{
+            try fetchedResultsController.performFetch()
+        }catch{
+            fatalError("Could not fetched note: \(error.localizedDescription)")
+        }
+        
     }
     
 
