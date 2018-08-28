@@ -25,6 +25,9 @@ class PhotosViewController: UIViewController {
         mapView.delegate = self
         addPin()
         setupFetchedResultsController()
+        
+        print("Pin injetado em PhotoViewControlle:")
+        print(pin)
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,10 +40,7 @@ class PhotosViewController: UIViewController {
         let annotation = MKPointAnnotation()
         annotation.coordinate.latitude = pin.latitude
         annotation.coordinate.longitude = pin.longitude
-        
-        
-            
-        
+
         mapView.addAnnotation(annotation)
         let span = MKCoordinateSpanMake(0.001, 0.001)
         let region = MKCoordinateRegionMake(annotation.coordinate, span)
@@ -50,13 +50,18 @@ class PhotosViewController: UIViewController {
     func setupFetchedResultsController(){
         //Create a fetchRequest (like "SELECT * FROM PHOTO")
         let fetchRequest : NSFetchRequest<Photo> = Photo.fetchRequest()
+        
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: true)
+        
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
         //Create a predicate (like: "WHERE ... ")
-        let predicate = NSPredicate(format: "notebook == %@", pin)
+        let predicate = NSPredicate(format: "pin == %@", pin)
         
         //Add predicate at fetchRequest
         fetchRequest.predicate = predicate
         
-        fetchedResultsController = NSFetchedResultsController<Photo>(fetchRequest: fetchRequest, managedObjectContext: DataController.sharedInstance().viewContext, sectionNameKeyPath: nil, cacheName: "\(pin.latitude) / \(String(describing: pin.longitude))")
+        fetchedResultsController = NSFetchedResultsController<Photo>(fetchRequest: fetchRequest, managedObjectContext: DataController.sharedInstance().viewContext, sectionNameKeyPath: nil, cacheName: nil)
         
         //TO DO: set fetchedResultsController delegate
         //fetchedResultsController.delegate =

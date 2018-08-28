@@ -9,6 +9,11 @@
 import Foundation
 import MapKit
 extension Pin : MKAnnotation{
+    public override func awakeFromInsert() {
+        super.awakeFromInsert()
+        self.creationDate = Date()
+    }
+    
     public var coordinate: CLLocationCoordinate2D {
         // latitude and longitude are optional NSNumbers
         

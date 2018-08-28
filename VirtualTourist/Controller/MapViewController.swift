@@ -23,7 +23,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         //Create a fetchRequest (like "SELECT * FROM PHOTO")
         let fetchRequest : NSFetchRequest<Pin> = Pin.fetchRequest()
         
-        let sortDescriptor = NSSortDescriptor(key: "latitude", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: true)
         
         fetchRequest.sortDescriptors = [sortDescriptor]
         
@@ -43,7 +43,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         do{
             try fetchedResultsController.performFetch()
-            mapView.addAnnotations(fetchedResultsController.fetchedObjects!)
         }catch{
             fatalError("Could not fetched note: \(error.localizedDescription)")
         }
@@ -67,6 +66,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         mapView.addGestureRecognizer(longPress)
         
         setupFetchedResultsController()
+        
+        if let annotations = fetchedResultsController.fetchedObjects{
+            mapView.addAnnotations(annotations)
+            print("Quantidade de Pins ao carregar: \(annotations.count)")
+            for pin in annotations{
+                print(pin)
+            }
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -75,23 +82,22 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         fetchedResultsController = nil
     }
     
-    
+    //MARK: Editing
     @objc func addPin(gestureRecognizer:UIGestureRecognizer){
         //esta verificação é necessária pois o longPress aciona esta método multiplas vezes e multiplos pinos seriam "dropados"
         if gestureRecognizer.state == .began{
             let touchPoint = gestureRecognizer.location(in: mapView)
-            //old
-//            let newCoordinates = mapView.convert(touchPoint, toCoordinateFrom: mapView)
-//            let annotation = MKPointAnnotation()
-//            annotation.coordinate = newCoordinates
-//            mapView.addAnnotation(annotation)
-            
-            //new
+
             let pin = Pin(context: DataController.sharedInstance().viewContext)
             pin.latitude = mapView.convert(touchPoint, toCoordinateFrom: mapView).latitude
             pin.longitude = mapView.convert(touchPoint, toCoordinateFrom: mapView).longitude
             
             try? DataController.sharedInstance().viewContext.save()
+            
+            print("Quantidade de Pins após salvar: \(String(describing: fetchedResultsController.fetchedObjects?.count))")
+            for pin in fetchedResultsController.fetchedObjects!{
+                print(pin)
+            }
         }
         
         
@@ -100,61 +106,51 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     // se fosse adicionar um pino com o endereço como título
     // esta função não está sendo usada!
-    @objc func addAnnotation(gestureRecognizer:UIGestureRecognizer){
-        if gestureRecognizer.state == UIGestureRecognizerState.began {
-            let touchPoint = gestureRecognizer.location(in: mapView)
-            let newCoordinates = mapView.convert(touchPoint, toCoordinateFrom: mapView)
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = newCoordinates
-            
-            CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: newCoordinates.latitude, longitude: newCoordinates.longitude), completionHandler: {(placemarks, error) -> Void in
-                if error != nil {
-                    print("Reverse geocoder failed with error" + (error?.localizedDescription)!)
-                    return
-                }
-                
-                if (placemarks?.count)! > 0 {
-                    let pm = placemarks![0] as CLPlacemark
-                    
-                    // not all places have thoroughfare & subThoroughfare so validate those values
-                    if pm.thoroughfare != nil && pm.subThoroughfare != nil {
-                        annotation.title = pm.thoroughfare! + ", " + (pm.subThoroughfare)!
-                        annotation.subtitle = pm.subLocality
-                        self.mapView.addAnnotation(annotation)
-                        print(pm)
-                    }
-                }
-                else {
-                    annotation.title = "Unknown Place"
-                    self.mapView.addAnnotation(annotation)
-                    print("Problem with the data received from geocoder")
-                }
-                //places.append(["name":annotation.title,"latitude":"\(newCoordinates.latitude)","longitude":"\(newCoordinates.longitude)"])
-            })
-        }
-    }
+//    @objc func addAnnotation(gestureRecognizer:UIGestureRecognizer){
+//        if gestureRecognizer.state == UIGestureRecognizerState.began {
+//            let touchPoint = gestureRecognizer.location(in: mapView)
+//            let newCoordinates = mapView.convert(touchPoint, toCoordinateFrom: mapView)
+//            let annotation = MKPointAnnotation()
+//            annotation.coordinate = newCoordinates
+//
+//            CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: newCoordinates.latitude, longitude: newCoordinates.longitude), completionHandler: {(placemarks, error) -> Void in
+//                if error != nil {
+//                    print("Reverse geocoder failed with error" + (error?.localizedDescription)!)
+//                    return
+//                }
+//
+//                if (placemarks?.count)! > 0 {
+//                    let pm = placemarks![0] as CLPlacemark
+//
+//                    // not all places have thoroughfare & subThoroughfare so validate those values
+//                    if pm.thoroughfare != nil && pm.subThoroughfare != nil {
+//                        annotation.title = pm.thoroughfare! + ", " + (pm.subThoroughfare)!
+//                        annotation.subtitle = pm.subLocality
+//                        self.mapView.addAnnotation(annotation)
+//                        print(pm)
+//                    }
+//                }
+//                else {
+//                    annotation.title = "Unknown Place"
+//                    self.mapView.addAnnotation(annotation)
+//                    print("Problem with the data received from geocoder")
+//                }
+//                //places.append(["name":annotation.title,"latitude":"\(newCoordinates.latitude)","longitude":"\(newCoordinates.longitude)"])
+//            })
+//        }
+//    }
     
 
 
 
     
 
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-
-    @IBAction func photosAction(_ sender: Any){
-        let photosViewController = storyboard?.instantiateViewController(withIdentifier: Constants.StoryboardID.photosViewController)
-
-        navigationController?.pushViewController(photosViewController!, animated: true)
-    }
+//    @IBAction func photosAction(_ sender: Any){
+//        let photosViewController = storyboard?.instantiateViewController(withIdentifier: Constants.StoryboardID.photosViewController)
+//
+//        navigationController?.pushViewController(photosViewController!, animated: true)
+//    }
 
     
 
@@ -165,20 +161,16 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     // MARK: - MKMapViewDelegate
     
-    // This delegate method is implemented to respond to taps. It go to PhotoViewController
-    // to the URL specified in the annotationViews subtitle property.
-    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        print("pin tapped callout!")
-        if control == view.rightCalloutAccessoryView {
-            let photosViewController = storyboard?.instantiateViewController(withIdentifier: Constants.StoryboardID.photosViewController)
-            navigationController?.pushViewController(photosViewController!, animated: true)
-        }
-    }
-    
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        let photosViewController = storyboard?.instantiateViewController(withIdentifier: Constants.StoryboardID.photosViewController) as! PhotosViewController
+        mapView.deselectAnnotation(view.annotation, animated: true)
 
-        //photosViewController.pin = view.annotation
+        let photosViewController = storyboard?.instantiateViewController(withIdentifier: Constants.StoryboardID.photosViewController) as! PhotosViewController
+        
+//       let indexPath = fetchedResultsController.indexPath(forObject: view.annotation as! Pin)
+//        print (view.annotation as! Pin)
+//        print ("IndexPath: \(String(describing: indexPath))")
+
+        photosViewController.pin = view.annotation as! Pin
         navigationController?.pushViewController(photosViewController, animated: true)
         
         
@@ -216,6 +208,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 }
 
 extension MapViewController: NSFetchedResultsControllerDelegate{
+    
+    //MARK: NSFetchedResultsControllerDelegate
     
     // informa o início das mudanças
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
