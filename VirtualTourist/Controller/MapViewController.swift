@@ -14,15 +14,50 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var mapView : MKMapView!
     
+    //var pin : Pin!
+    
+    var fetchedResultsController : NSFetchedResultsController<Pin>!
+    
+    
+    func setupFetchedResultsController(){
+        //Create a fetchRequest (like "SELECT * FROM PHOTO")
+        let fetchRequest : NSFetchRequest<Pin> = Pin.fetchRequest()
+        
+        let sortDescriptor = NSSortDescriptor(key: "latitude", ascending: false)
+        
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        //bloco que testa o fetchRequest
+//        if let results = try? DataController.sharedInstance().viewContext.fetch(fetchRequest){
+//            print ("\(results[0].longitude)")
+//
+//            for pin in results{
+//                print( "Long: \(pin.longitude) \n Lat: \(pin.latitude)" )
+//            }
+//        }
+        
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: DataController.sharedInstance().viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        //set fetchedResultsController delegate
+        fetchedResultsController.delegate = self
+        
+        do{
+            try fetchedResultsController.performFetch()
+            mapView.addAnnotations(fetchedResultsController.fetchedObjects!)
+        }catch{
+            fatalError("Could not fetched note: \(error.localizedDescription)")
+        }
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.mapView.delegate = self
-        
+
         if let region = Preferences.sharedInstance().region{
             mapView.region = region
             print ("Region resoursed!")
-            print (region)
         }
         
         //add longPress (permite executar uma funcao apos "clicar" e "segurar" um local no mapa)
@@ -30,8 +65,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(addPin(gestureRecognizer:)))
         //longPress.minimumPressDuration = 1.5
         mapView.addGestureRecognizer(longPress)
-
         
+        setupFetchedResultsController()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        fetchedResultsController = nil
     }
     
     
@@ -39,11 +80,22 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         //esta verificação é necessária pois o longPress aciona esta método multiplas vezes e multiplos pinos seriam "dropados"
         if gestureRecognizer.state == .began{
             let touchPoint = gestureRecognizer.location(in: mapView)
-            let newCoordinates = mapView.convert(touchPoint, toCoordinateFrom: mapView)
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = newCoordinates
-            mapView.addAnnotation(annotation)
+            //old
+//            let newCoordinates = mapView.convert(touchPoint, toCoordinateFrom: mapView)
+//            let annotation = MKPointAnnotation()
+//            annotation.coordinate = newCoordinates
+//            mapView.addAnnotation(annotation)
+            
+            //new
+            let pin = Pin(context: DataController.sharedInstance().viewContext)
+            pin.latitude = mapView.convert(touchPoint, toCoordinateFrom: mapView).latitude
+            pin.longitude = mapView.convert(touchPoint, toCoordinateFrom: mapView).longitude
+            
+            try? DataController.sharedInstance().viewContext.save()
         }
+        
+        
+        
     }
     
     // se fosse adicionar um pino com o endereço como título
@@ -126,7 +178,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         let photosViewController = storyboard?.instantiateViewController(withIdentifier: Constants.StoryboardID.photosViewController) as! PhotosViewController
 
-        photosViewController.annotation = view.annotation
+        //photosViewController.pin = view.annotation
         navigationController?.pushViewController(photosViewController, animated: true)
         
         
@@ -162,3 +214,61 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         Preferences.sharedInstance().save()
     }
 }
+
+extension MapViewController: NSFetchedResultsControllerDelegate{
+    
+    // informa o início das mudanças
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        //prepara a tabela para iniciar as mudanças
+        //tableView.beginUpdates()
+    }
+    // informa o fim das mudanças
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        //finaliza as mudanças na tabela
+        //tableView.endUpdates()
+    }
+    
+    /* Este método é chamado sempre que o fetchedResultsController recebe a notificação de que um
+     objeto foi adicionado, excluído ou alterado. */
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        
+        guard let pin = anObject as? Pin else {
+            preconditionFailure("All changes observed in the map view controller should be for Point instances")
+        }
+        
+        // o parâmetro 'type' informa se é inserção, deleção ou alteração
+        switch type {
+        case .insert:
+            mapView.addAnnotation(pin)
+            print ("Adicionado pin: \(pin)")
+            break
+        case .delete:
+            mapView.removeAnnotation(pin)
+            break
+        case .update:
+            mapView.removeAnnotation(pin)
+            mapView.addAnnotation(pin)
+            break
+        case .move:
+            // N.B. The fetched results controller was set up with a single sort descriptor that produced a consistent ordering for its fetched Point instances.
+            fatalError("How did we move a Point? We have a stable sort.")
+        }
+    }
+    
+//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+//
+//        let indexSet = IndexSet(integer: sectionIndex)
+//
+//        switch type {
+//        case .insert:
+//            tableView.insertSections(indexSet, with: .fade)
+//            break
+//        case .delete:
+//            tableView.deleteSections(indexSet, with: .fade)
+//            break
+//        case .move, .update:
+//            fatalError("Invalid change type in controller(_:didChange:atSectionIndex:for:). Only .insert ou .delete should be possible.")
+//        }
+//    }
+}
+

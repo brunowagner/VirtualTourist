@@ -36,7 +36,7 @@ class PhotosViewController: UIViewController {
         
         let annotation = MKPointAnnotation()
         annotation.coordinate.latitude = pin.latitude
-        annotation.coordinate.longitude = pin.longitude as! CLLocationDegrees
+        annotation.coordinate.longitude = pin.longitude
         
         
             

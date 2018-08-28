@@ -12,15 +12,13 @@ import CoreData
 class DataController{
     
     var persistentContainer : NSPersistentContainer
-    var viewContext : NSManagedObjectContext
-    var backgroudContext: NSManagedObjectContext
+    var viewContext : NSManagedObjectContext {
+        return persistentContainer.viewContext
+    }
+    var backgroundContext: NSManagedObjectContext!
     
     private init(modelName : String){
         self.persistentContainer = NSPersistentContainer(name: modelName)
-        
-        //inicia as propriedades com seus devidos contextos
-        self.viewContext = persistentContainer.viewContext
-        self.backgroudContext = persistentContainer.newBackgroundContext()
     }
     
     func load(completion: (()->Void)? = nil){
@@ -33,20 +31,25 @@ class DataController{
             // função criada para configurar os contextos da fila principal e da fila privada(background)
             self.configureContexts()
             
+            print ("Data Stak Loadded")
             completion?()
         }
     }
     
     private func configureContexts(){
+        
+        //instancia um contexto associado com uma fila privada
+        backgroundContext = persistentContainer.newBackgroundContext()
+        
         //determina que os contextos pares realizem a fusão de mudanças automaticamente
         viewContext.automaticallyMergesChangesFromParent = true
-        backgroudContext.automaticallyMergesChangesFromParent = true
+        backgroundContext.automaticallyMergesChangesFromParent = true
         
         //define as políticas de fusão para que o app não trave em caso de conflito
         // mergeByPropertyObjectTrump -> prefere os valores das propriedades do objeto em caso de conflito.
         // mergeByPropertyStoreTrump -> prefere os valores das propriedades do persistentStore em caso de conflito.
         viewContext.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
-        backgroudContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+        backgroundContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
     }
     
     // função para salvamento em intervalos
