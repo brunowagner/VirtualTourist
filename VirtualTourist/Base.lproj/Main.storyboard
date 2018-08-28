@@ -59,13 +59,27 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="bvs-ba-Hkm">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoCell" id="bvs-ba-Hkm" customClass="PhotoCell" customModule="VirtualTourist" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ccK-5U-J0O">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                </imageView>
+                                            </subviews>
                                         </view>
+                                        <constraints>
+                                            <constraint firstItem="ccK-5U-J0O" firstAttribute="leading" secondItem="bvs-ba-Hkm" secondAttribute="leading" id="ND8-Yn-46G"/>
+                                            <constraint firstAttribute="trailing" secondItem="ccK-5U-J0O" secondAttribute="trailing" id="blA-uP-BK3"/>
+                                            <constraint firstItem="ccK-5U-J0O" firstAttribute="top" secondItem="bvs-ba-Hkm" secondAttribute="top" id="ecp-iy-Zuy"/>
+                                            <constraint firstAttribute="bottom" secondItem="ccK-5U-J0O" secondAttribute="bottom" id="ojM-H4-XJx"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="imageView" destination="ccK-5U-J0O" id="3y9-QZ-wfL"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
@@ -93,6 +107,7 @@
                     </toolbarItems>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="collectionView" destination="4LH-gp-3gl" id="Rwb-yH-Mxd"/>
                         <outlet property="mapView" destination="m1n-88-X0h" id="NMG-GT-v0R"/>
                     </connections>
                 </viewController>

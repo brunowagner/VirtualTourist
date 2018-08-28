@@ -19,7 +19,32 @@ class PhotosViewController: UIViewController {
     var fetchedResultsController : NSFetchedResultsController<Photo>!
     
     @IBOutlet weak var mapView : MKMapView!
+    @IBOutlet weak var collectionView : UICollectionView!
 
+    fileprivate func addPhoto(_ imageData: Data) {
+        let photo = Photo(context: DataController.sharedInstance().viewContext)
+        
+        photo.photo = imageData
+        photo.pin = self.pin
+        
+        try? DataController.sharedInstance().viewContext.save()
+    }
+    
+    fileprivate func downLoadPhotos() {
+        FlickrClient.sharedInstance().findPhotosURLByLocation(latitude: pin.latitude, longitude: pin.longitude, radius: 1) { (urls, error) in
+            guard error == nil else{
+                print ("falkha ao baixar imagens")
+                return
+            }
+            
+            for url in urls!{
+                if let imageData = try? Data(contentsOf: url){
+                    self.addPhoto(imageData)
+                }
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
@@ -29,8 +54,23 @@ class PhotosViewController: UIViewController {
         print("Pin injetado em PhotoViewControlle:")
         print(pin)
         
-        FlickrClient.sharedInstance().findFotosByLocation(latitude: pin.latitude, longitude: pin.longitude, radius: 1) { (results, error) in
-            print (results ?? "Flickr: Não teve results")
+        if pinHasPhotoOnCoreData(pin: pin){
+            
+        }else{
+            downLoadPhotos()
+        }
+    }
+    
+    private func pinHasPhotoOnCoreData(pin : Pin) -> Bool{
+        guard let itens = pin.photos else {
+            print("Pin.Photos Inválido!")
+            return false
+        }
+        
+        if itens.count > 0 {
+            return true
+        }else{
+            return false
         }
     }
 
@@ -67,8 +107,7 @@ class PhotosViewController: UIViewController {
         
         fetchedResultsController = NSFetchedResultsController<Photo>(fetchRequest: fetchRequest, managedObjectContext: DataController.sharedInstance().viewContext, sectionNameKeyPath: nil, cacheName: nil)
         
-        //TO DO: set fetchedResultsController delegate
-        //fetchedResultsController.delegate =
+        fetchedResultsController.delegate = self
         
         do{
             try fetchedResultsController.performFetch()
@@ -77,17 +116,6 @@ class PhotosViewController: UIViewController {
         }
         
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 extension PhotosViewController: MKMapViewDelegate{
@@ -109,5 +137,52 @@ extension PhotosViewController: MKMapViewDelegate{
             pinView!.annotation = annotation
         }
         return pinView
+    }
+}
+
+extension PhotosViewController: UICollectionViewDataSource{
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
+        let aPhoto = fetchedResultsController.object(at: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
+        
+        cell.imageView.image = UIImage(data: aPhoto.photo!)
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return (fetchedResultsController.sections?[section].numberOfObjects)!
+    }
+}
+
+extension PhotosViewController: NSFetchedResultsControllerDelegate{
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        <#code#>
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        
+        switch type {
+        case .insert:
+            collectionView.insertItems(at: [newIndexPath!])
+            break
+        case .delete:
+            collectionView.deleteItems(at: [indexPath!])
+            break
+        case .update:
+            //TODO: Codeficar o tipo update
+            break
+        case .move: break
+        //TODO: codificar o tipo move
+        }
     }
 }

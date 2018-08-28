@@ -9,9 +9,6 @@
 import Foundation
 class FlickrClient{
     
-    typealias completionAnyObjectAndError = (AnyObject?, NSError?)->Void
-    typealias completionDictionaryAndError = (AnyObject?, NSError?)->Void
-    
     let defaultParametersToSearch : [String : AnyObject] = [
         Constants.Flickr.FlickrParameterKeys.APIKey : Constants.Flickr.FlickrParameterValues.APIKey as AnyObject,
         Constants.Flickr.FlickrParameterKeys.Method : Constants.Flickr.FlickrParameterValues.SearchMethod as AnyObject ,
@@ -135,7 +132,6 @@ class FlickrClient{
             completion(urls,nil)
         }
     }
-    
     
     class func sharedInstance()-> FlickrClient{
         struct Singleton{
