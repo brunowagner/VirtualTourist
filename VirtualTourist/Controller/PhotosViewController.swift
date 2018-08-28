@@ -28,6 +28,10 @@ class PhotosViewController: UIViewController {
         
         print("Pin injetado em PhotoViewControlle:")
         print(pin)
+        
+        FlickrClient.sharedInstance().findFotosByLocation(latitude: pin.latitude, longitude: pin.longitude, radius: 1) { (results, error) in
+            print (results ?? "Flickr: Não teve results")
+        }
     }
 
     override func didReceiveMemoryWarning() {
