@@ -69,6 +69,8 @@ class PhotosViewController: UIViewController {
         super.viewDidLoad()
         configureFlow()
         
+        collectionView.delegate = self
+        
         self.hidesBottomBarWhenPushed = false
         
         mapView.delegate = self
@@ -169,6 +171,9 @@ class PhotosViewController: UIViewController {
 }
 
 extension PhotosViewController: MKMapViewDelegate{
+    
+    //MARK: MKMapViewDelegate
+    
     // Here we create a view with a "right callout accessory view". You might choose to look into other
     // decoration alternatives. Notice the similarity between this method and the cellForRowAtIndexPath
     // method in TableViewDataSource.
@@ -191,6 +196,8 @@ extension PhotosViewController: MKMapViewDelegate{
 }
 
 extension PhotosViewController: UICollectionViewDataSource{
+    
+    //MARK: UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         let aPhoto = fetchedResultsController.object(at: indexPath)
@@ -215,8 +222,19 @@ extension PhotosViewController: UICollectionViewDataSource{
     }
 }
 
+extension PhotosViewController: UICollectionViewDelegate{
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let photoToDelete = fetchedResultsController.object(at: indexPath)
+        DataController.sharedInstance().viewContext.delete(photoToDelete)
+        try? DataController.sharedInstance().viewContext.save()
+        
+    }
+}
+
 extension PhotosViewController: NSFetchedResultsControllerDelegate{
     
+    //MARK: NSFetchedResultsControllerDelegate
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         //this code was found at "https://github.com/ton1n8o/Virtual-Tourist/blob/master/Virtual%20Tourist/ViewControllers/PhotoAlbumViewController%2BExtension.swift"
         insertedIndexPaths = [IndexPath]()
@@ -241,7 +259,6 @@ extension PhotosViewController: NSFetchedResultsControllerDelegate{
             }
             
         }, completion: nil)
-        
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
