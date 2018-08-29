@@ -54,6 +54,10 @@ class PhotosViewController: UIViewController {
         }
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        configureFlow(toTransition: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureFlow()
@@ -128,13 +132,19 @@ class PhotosViewController: UIViewController {
         }
     }
     
-    func configureFlow(){
+    func configureFlow(toTransition : Bool = false){
         let space : CGFloat = 1.0
-        let width = (view.frame.size.width - (2 * space)) / 3.0
+        let side : CGFloat
         
+        if toTransition{
+            side = (view.frame.size.height - (2 * space)) / 3.0
+        }else{
+            side = (view.frame.size.width - (2 * space)) / 3.0
+        }
+
         flowLayout.minimumInteritemSpacing = space
         flowLayout.minimumLineSpacing = space
-        flowLayout.itemSize = CGSize(width: width, height: width)
+        flowLayout.itemSize = CGSize(width: side, height: side)
     }
 }
 
