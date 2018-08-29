@@ -100,61 +100,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 //            }
         }
     }
-    
-    // se fosse adicionar um pino com o endereço como título
-    // esta função não está sendo usada!
-//    @objc func addAnnotation(gestureRecognizer:UIGestureRecognizer){
-//        if gestureRecognizer.state == UIGestureRecognizerState.began {
-//            let touchPoint = gestureRecognizer.location(in: mapView)
-//            let newCoordinates = mapView.convert(touchPoint, toCoordinateFrom: mapView)
-//            let annotation = MKPointAnnotation()
-//            annotation.coordinate = newCoordinates
-//
-//            CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: newCoordinates.latitude, longitude: newCoordinates.longitude), completionHandler: {(placemarks, error) -> Void in
-//                if error != nil {
-//                    print("Reverse geocoder failed with error" + (error?.localizedDescription)!)
-//                    return
-//                }
-//
-//                if (placemarks?.count)! > 0 {
-//                    let pm = placemarks![0] as CLPlacemark
-//
-//                    // not all places have thoroughfare & subThoroughfare so validate those values
-//                    if pm.thoroughfare != nil && pm.subThoroughfare != nil {
-//                        annotation.title = pm.thoroughfare! + ", " + (pm.subThoroughfare)!
-//                        annotation.subtitle = pm.subLocality
-//                        self.mapView.addAnnotation(annotation)
-//                        print(pm)
-//                    }
-//                }
-//                else {
-//                    annotation.title = "Unknown Place"
-//                    self.mapView.addAnnotation(annotation)
-//                    print("Problem with the data received from geocoder")
-//                }
-//                //places.append(["name":annotation.title,"latitude":"\(newCoordinates.latitude)","longitude":"\(newCoordinates.longitude)"])
-//            })
-//        }
-//    }
-    
 
-
-
-    
-
-
-//    @IBAction func photosAction(_ sender: Any){
-//        let photosViewController = storyboard?.instantiateViewController(withIdentifier: Constants.StoryboardID.photosViewController)
-//
-//        navigationController?.pushViewController(photosViewController!, animated: true)
-//    }
-
-    
-
-    
-
-    
-    
     
     // MARK: - MKMapViewDelegate
     

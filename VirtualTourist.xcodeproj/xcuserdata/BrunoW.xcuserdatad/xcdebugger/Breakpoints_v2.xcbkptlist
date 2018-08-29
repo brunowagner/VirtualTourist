@@ -10,59 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VirtualTourist/Controller/MapViewController.swift"
-            timestampString = "557108096.44997"
+            timestampString = "557238589.9701"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
-            landmarkName = "addAnnotation(gestureRecognizer:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "VirtualTourist/Controller/MapViewController.swift"
-            timestampString = "557108096.450069"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
-            landmarkName = "addAnnotation(gestureRecognizer:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "VirtualTourist/Controller/MapViewController.swift"
-            timestampString = "557108096.450146"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
-            landmarkName = "addAnnotation(gestureRecognizer:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "VirtualTourist/Controller/MapViewController.swift"
-            timestampString = "557108096.450215"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "190"
-            endingLineNumber = "190"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "mapView(_:viewFor:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VirtualTourist/Controller/MapViewController.swift"
-            timestampString = "557108096.450281"
+            timestampString = "557238589.970176"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "275"
-            endingLineNumber = "275">
+            startingLineNumber = "212"
+            endingLineNumber = "212">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -88,11 +40,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VirtualTourist/Controller/MapViewController.swift"
-            timestampString = "557108096.450345"
+            timestampString = "557238589.970226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
@@ -104,28 +56,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VirtualTourist/Controller/MapViewController.swift"
-            timestampString = "557108096.450408"
+            timestampString = "557238589.970269"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
             landmarkName = "viewDidLoad()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "VirtualTourist/Controller/MapViewController.swift"
-            timestampString = "557108096.4504679"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
-            landmarkName = "addAnnotation(gestureRecognizer:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -136,11 +72,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VirtualTourist/Controller/MapViewController.swift"
-            timestampString = "557108096.450531"
+            timestampString = "557238589.970312"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
             landmarkName = "mapView(_:viewFor:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -152,7 +88,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VirtualTourist/Model/DataController.swift"
-            timestampString = "557108096.450595"
+            timestampString = "557154797.579095"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "20"
@@ -200,7 +136,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VirtualTourist/Model/DataController.swift"
-            timestampString = "557108096.450639"
+            timestampString = "557154797.579308"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "24"
@@ -248,7 +184,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VirtualTourist/Model/DataController.swift"
-            timestampString = "557108096.450681"
+            timestampString = "557154797.579358"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "39"
@@ -264,11 +200,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VirtualTourist/Controller/MapViewController.swift"
-            timestampString = "557108096.4507231"
+            timestampString = "557238589.970459"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "233"
-            endingLineNumber = "233"
+            startingLineNumber = "170"
+            endingLineNumber = "170"
             landmarkName = "controller(_:didChange:at:for:newIndexPath:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -276,15 +212,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VirtualTourist/Controller/MapViewController.swift"
-            timestampString = "557108096.450776"
+            timestampString = "557238589.970503"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "226"
-            endingLineNumber = "226"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
             landmarkName = "controllerDidChangeContent(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -292,15 +228,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VirtualTourist/Controller/MapViewController.swift"
-            timestampString = "557108096.450828"
+            timestampString = "557238589.970544"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "221"
-            endingLineNumber = "221"
+            startingLineNumber = "158"
+            endingLineNumber = "158"
             landmarkName = "controllerWillChangeContent(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -312,7 +248,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VirtualTourist/Controller/MapViewController.swift"
-            timestampString = "557108096.450882"
+            timestampString = "557238589.970584"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "24"
@@ -324,16 +260,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VirtualTourist/Controller/MapViewController.swift"
-            timestampString = "557108096.4509341"
+            timestampString = "557238589.9706219"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "170"
-            endingLineNumber = "170"
-            landmarkName = "mapView(_:annotationView:calloutAccessoryControlTapped:)"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
+            landmarkName = "MapViewController"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VirtualTourist/Controller/MapViewController.swift"
+            timestampString = "557238589.97066"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
+            landmarkName = "setupFetchedResultsController()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -344,12 +296,108 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "VirtualTourist/Controller/MapViewController.swift"
-            timestampString = "557108096.450978"
+            timestampString = "557238589.970698"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
-            landmarkName = "setupFetchedResultsController()"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
+            landmarkName = "mapView(_:didSelect:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VirtualTourist/Controller/PhotosViewController.swift"
+            timestampString = "557238589.970751"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "192"
+            endingLineNumber = "192"
+            landmarkName = "controller(_:didChange:at:for:newIndexPath:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VirtualTourist/Controller/PhotosViewController.swift"
+            timestampString = "557238589.971115"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
+            landmarkName = "pinHasPhotoOnCoreData(pin:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VirtualTourist/Controller/PhotosViewController.swift"
+            timestampString = "557238589.971359"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "downLoadPhotos()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VirtualTourist/Controller/PhotosViewController.swift"
+            timestampString = "557238589.971736"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "addPhoto(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VirtualTourist/Controller/PhotosViewController.swift"
+            timestampString = "557238589.9719549"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VirtualTourist/Controller/PhotosViewController.swift"
+            timestampString = "557238589.9721709"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -50,7 +50,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="4LH-gp-3gl">
-                                <rect key="frame" x="0.0" y="173" width="375" height="450"/>
+                                <rect key="frame" x="0.0" y="176" width="375" height="447"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="hA1-HR-wO6">
                                     <size key="itemSize" width="50" height="50"/>
@@ -89,26 +89,36 @@
                                     <constraint firstAttribute="height" constant="109" id="l5r-TX-3Jz"/>
                                 </constraints>
                             </mapView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i0a-Z0-2C1">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="jVh-UX-U2o"/>
+                                    <barButtonItem title="New Collection" id="ykh-h2-Gye"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Rlo-Ib-SmP"/>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="DFh-S6-rLZ" firstAttribute="trailing" secondItem="m1n-88-X0h" secondAttribute="trailing" id="04C-bF-aLw"/>
-                            <constraint firstItem="4LH-gp-3gl" firstAttribute="top" secondItem="m1n-88-X0h" secondAttribute="bottom" id="6xb-pW-KCS"/>
+                            <constraint firstItem="i0a-Z0-2C1" firstAttribute="leading" secondItem="DFh-S6-rLZ" secondAttribute="leading" id="0Gm-Lm-v65"/>
+                            <constraint firstItem="DFh-S6-rLZ" firstAttribute="trailing" secondItem="i0a-Z0-2C1" secondAttribute="trailing" id="5sc-tr-XaP"/>
+                            <constraint firstItem="4LH-gp-3gl" firstAttribute="top" secondItem="m1n-88-X0h" secondAttribute="bottom" constant="3" id="6xb-pW-KCS"/>
                             <constraint firstItem="m1n-88-X0h" firstAttribute="leading" secondItem="DFh-S6-rLZ" secondAttribute="leading" id="H5G-7e-Ldg"/>
-                            <constraint firstItem="DFh-S6-rLZ" firstAttribute="bottom" secondItem="4LH-gp-3gl" secondAttribute="bottom" id="i7a-KD-f32"/>
+                            <constraint firstItem="DFh-S6-rLZ" firstAttribute="bottom" secondItem="i0a-Z0-2C1" secondAttribute="bottom" id="OGN-Yq-oSs"/>
+                            <constraint firstItem="4LH-gp-3gl" firstAttribute="bottom" secondItem="i0a-Z0-2C1" secondAttribute="top" id="i7a-KD-f32"/>
                             <constraint firstItem="m1n-88-X0h" firstAttribute="top" secondItem="DFh-S6-rLZ" secondAttribute="top" id="lC1-Ue-DSh"/>
                             <constraint firstItem="4LH-gp-3gl" firstAttribute="leading" secondItem="DFh-S6-rLZ" secondAttribute="leading" id="mmW-rm-XDr"/>
                             <constraint firstItem="DFh-S6-rLZ" firstAttribute="trailing" secondItem="4LH-gp-3gl" secondAttribute="trailing" id="nxd-Fh-BKz"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="DFh-S6-rLZ"/>
                     </view>
-                    <toolbarItems>
-                        <barButtonItem title="New Collection" width="725.5" id="Crh-A1-zD2"/>
-                    </toolbarItems>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <toolbarItems/>
                     <connections>
                         <outlet property="collectionView" destination="4LH-gp-3gl" id="Rwb-yH-Mxd"/>
+                        <outlet property="flowLayout" destination="hA1-HR-wO6" id="Koa-2I-9ft"/>
                         <outlet property="mapView" destination="m1n-88-X0h" id="NMG-GT-v0R"/>
+                        <outlet property="newCollectionButton" destination="ykh-h2-Gye" id="z1h-So-NDS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ccc-NT-26d" userLabel="First Responder" sceneMemberID="firstResponder"/>

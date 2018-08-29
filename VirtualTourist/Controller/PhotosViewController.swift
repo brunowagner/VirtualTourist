@@ -20,6 +20,9 @@ class PhotosViewController: UIViewController {
     
     @IBOutlet weak var mapView : MKMapView!
     @IBOutlet weak var collectionView : UICollectionView!
+    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
+    @IBOutlet weak var newCollectionButton: UIBarButtonItem!
+    
 
     fileprivate func addPhoto(_ imageData: Data) {
         let photo = Photo(context: DataController.sharedInstance().viewContext)
@@ -31,6 +34,9 @@ class PhotosViewController: UIViewController {
     }
     
     fileprivate func downLoadPhotos() {
+        
+        disableNewCollectionButton(disable: true)
+        
         FlickrClient.sharedInstance().findPhotosURLByLocation(latitude: pin.latitude, longitude: pin.longitude, radius: 1) { (urls, error) in
             guard error == nil else{
                 print ("falkha ao baixar imagens")
@@ -42,11 +48,18 @@ class PhotosViewController: UIViewController {
                     self.addPhoto(imageData)
                 }
             }
+            performUIUpdatesOnMain {
+                self.disableNewCollectionButton(disable: false)
+            }
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureFlow()
+        
+        self.hidesBottomBarWhenPushed = false
+        
         mapView.delegate = self
         collectionView.dataSource = self
         addPin()
@@ -61,6 +74,10 @@ class PhotosViewController: UIViewController {
         }
     }
     
+    private func disableNewCollectionButton(disable:Bool){
+        newCollectionButton.isEnabled = !disable
+    }
+    
     private func pinHasPhotoOnCoreData(pin : Pin) -> Bool{
         guard let itens = pin.photos else {
             print("Pin.Photos Inválido!")
@@ -72,11 +89,6 @@ class PhotosViewController: UIViewController {
         }else{
             return false
         }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     fileprivate func addPin() {
@@ -114,10 +126,18 @@ class PhotosViewController: UIViewController {
         }catch{
             fatalError("Could not fetched note: \(error.localizedDescription)")
         }
-        
     }
-
+    
+    func configureFlow(){
+        let space : CGFloat = 1.0
+        let width = (view.frame.size.width - (2 * space)) / 3.0
+        
+        flowLayout.minimumInteritemSpacing = space
+        flowLayout.minimumLineSpacing = space
+        flowLayout.itemSize = CGSize(width: width, height: width)
+    }
 }
+
 extension PhotosViewController: MKMapViewDelegate{
     // Here we create a view with a "right callout accessory view". You might choose to look into other
     // decoration alternatives. Notice the similarity between this method and the cellForRowAtIndexPath
