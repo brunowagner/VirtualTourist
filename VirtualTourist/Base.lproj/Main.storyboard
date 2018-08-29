@@ -93,7 +93,11 @@
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="jVh-UX-U2o"/>
-                                    <barButtonItem title="New Collection" id="ykh-h2-Gye"/>
+                                    <barButtonItem title="New Collection" id="ykh-h2-Gye">
+                                        <connections>
+                                            <action selector="newCollectionActionWithSender:" destination="ZXw-jf-NTl" id="T3C-83-7dr"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="Rlo-Ib-SmP"/>
                                 </items>
                             </toolbar>

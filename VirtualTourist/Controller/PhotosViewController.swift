@@ -23,6 +23,13 @@ class PhotosViewController: UIViewController {
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var newCollectionButton: UIBarButtonItem!
     
+    // MARK: - Variables
+    
+    var selectedIndexes = [IndexPath]()
+    var insertedIndexPaths: [IndexPath]!
+    var deletedIndexPaths: [IndexPath]!
+    var updatedIndexPaths: [IndexPath]!
+    
 
     fileprivate func addPhoto(_ imageData: Data) {
         let photo = Photo(context: DataController.sharedInstance().viewContext)
@@ -37,7 +44,7 @@ class PhotosViewController: UIViewController {
         
         disableNewCollectionButton(disable: true)
         
-        FlickrClient.sharedInstance().findPhotosURLByLocation(latitude: pin.latitude, longitude: pin.longitude, radius: 1) { (urls, error) in
+        FlickrClient.sharedInstance().findPhotosURLByLocation(latitude: pin.latitude, longitude: pin.longitude, radius: 0.1) { (urls, error) in
             guard error == nil else{
                 print ("falkha ao baixar imagens")
                 return
@@ -146,6 +153,19 @@ class PhotosViewController: UIViewController {
         flowLayout.minimumLineSpacing = space
         flowLayout.itemSize = CGSize(width: side, height: side)
     }
+    
+    @IBAction func newCollectionAction(sender: UIBarButtonItem){
+        //apagar anterior
+        self.deletePhotos()
+        self.downLoadPhotos()
+    }
+    
+    func deletePhotos(){
+        for photos in fetchedResultsController.fetchedObjects!{
+            DataController.sharedInstance().viewContext.delete(photos)
+        }
+        try? DataController.sharedInstance().viewContext.save()
+    }
 }
 
 extension PhotosViewController: MKMapViewDelegate{
@@ -185,37 +205,60 @@ extension PhotosViewController: UICollectionViewDataSource{
         return false
     }
     
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return fetchedResultsController.sections?.count ?? 1
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return (fetchedResultsController.sections?[section].numberOfObjects)!
+        return fetchedResultsController.sections?[0].numberOfObjects ?? 0
+        //return (fetchedResultsController.sections?[section].numberOfObjects)!
     }
 }
 
 extension PhotosViewController: NSFetchedResultsControllerDelegate{
+    
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        
+        //this code was found at "https://github.com/ton1n8o/Virtual-Tourist/blob/master/Virtual%20Tourist/ViewControllers/PhotoAlbumViewController%2BExtension.swift"
+        insertedIndexPaths = [IndexPath]()
+        deletedIndexPaths = [IndexPath]()
+        updatedIndexPaths = [IndexPath]()
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        //this code was found at "https://github.com/ton1n8o/Virtual-Tourist/blob/master/Virtual%20Tourist/ViewControllers/PhotoAlbumViewController%2BExtension.swift"
+        collectionView.performBatchUpdates({() -> Void in
+            
+            for indexPath in self.insertedIndexPaths {
+                self.collectionView.insertItems(at: [indexPath])
+            }
+            
+            for indexPath in self.deletedIndexPaths {
+                self.collectionView.deleteItems(at: [indexPath])
+            }
+            
+            for indexPath in self.updatedIndexPaths {
+                self.collectionView.reloadItems(at: [indexPath])
+            }
+            
+        }, completion: nil)
         
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        
-        switch type {
+        //this code was found at "https://github.com/ton1n8o/Virtual-Tourist/blob/master/Virtual%20Tourist/ViewControllers/PhotoAlbumViewController%2BExtension.swift"
+        switch (type) {
         case .insert:
-            DispatchQueue.main.async {
-                self.collectionView.insertItems(at: [newIndexPath!])
-                print ("Insert funcionou!!!!!!!!!!!!!")
-            }
+            insertedIndexPaths.append(newIndexPath!)
             break
         case .delete:
-            collectionView.deleteItems(at: [indexPath!])
+            deletedIndexPaths.append(indexPath!)
             break
         case .update:
-            //TODO: Codeficar o tipo update
+            updatedIndexPaths.append(indexPath!)
             break
-        case .move: break
-        //TODO: codificar o tipo move
+        case .move:
+            print("Move an item. We don't expect to see this in this app.")
+            break
         }
     }
 }
