@@ -94,14 +94,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             try? DataController.sharedInstance().viewContext.save()
             
-            print("Quantidade de Pins após salvar: \(String(describing: fetchedResultsController.fetchedObjects?.count))")
-            for pin in fetchedResultsController.fetchedObjects!{
-                print(pin)
-            }
+            //print("Quantidade de Pins após salvar: \(String(describing: fetchedResultsController.fetchedObjects?.count))")
+//            for pin in fetchedResultsController.fetchedObjects!{
+//                print(pin)
+//            }
         }
-        
-        
-        
     }
     
     // se fosse adicionar um pino com o endereço como título

@@ -48,6 +48,7 @@ class PhotosViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
+        collectionView.dataSource = self
         addPin()
         setupFetchedResultsController()
         
@@ -55,7 +56,6 @@ class PhotosViewController: UIViewController {
         print(pin)
         
         if pinHasPhotoOnCoreData(pin: pin){
-            
         }else{
             downLoadPhotos()
         }
@@ -166,14 +166,17 @@ extension PhotosViewController: NSFetchedResultsControllerDelegate{
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        <#code#>
+        
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         
         switch type {
         case .insert:
-            collectionView.insertItems(at: [newIndexPath!])
+            DispatchQueue.main.async {
+                self.collectionView.insertItems(at: [newIndexPath!])
+                print ("Insert funcionou!!!!!!!!!!!!!")
+            }
             break
         case .delete:
             collectionView.deleteItems(at: [indexPath!])
