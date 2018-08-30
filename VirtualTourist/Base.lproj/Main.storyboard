@@ -58,6 +58,13 @@
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
+                                <label key="backgroundView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Have no photo!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qxt-Yv-td6">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="447"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoCell" id="bvs-ba-Hkm" customClass="PhotoCell" customModule="VirtualTourist" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -121,6 +128,7 @@
                     <connections>
                         <outlet property="collectionView" destination="4LH-gp-3gl" id="Rwb-yH-Mxd"/>
                         <outlet property="flowLayout" destination="hA1-HR-wO6" id="Koa-2I-9ft"/>
+                        <outlet property="infoLabel" destination="qxt-Yv-td6" id="goZ-n4-SzL"/>
                         <outlet property="mapView" destination="m1n-88-X0h" id="NMG-GT-v0R"/>
                         <outlet property="newCollectionButton" destination="ykh-h2-Gye" id="z1h-So-NDS"/>
                     </connections>

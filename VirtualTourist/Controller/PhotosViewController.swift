@@ -22,17 +22,18 @@ class PhotosViewController: UIViewController {
     //MARK: IBOutlets
     @IBOutlet weak var mapView : MKMapView!
     @IBOutlet weak var collectionView : UICollectionView!
+    @IBOutlet weak var infoLabel: UILabel!
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var newCollectionButton: UIBarButtonItem!
  
     //MARK: LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.haveNoPhotoInfo(display: false)
 		self.configureFlow()
         self.setDelegatesAndDataSource()
         self.addPinOnTheMap()
         self.setupFetchedResultsController()
-		//self.hidesBottomBarWhenPushed = false
         self.populateCollection()
     }
 
@@ -43,7 +44,7 @@ class PhotosViewController: UIViewController {
 	//MARK: IBAction
     @IBAction func newCollectionAction(sender: UIBarButtonItem){
         self.deletePhotos()
-        self.downloadPhotos()
+        self.populateCollection()
     }
     
 	//MARK: Editing
@@ -98,8 +99,14 @@ class PhotosViewController: UIViewController {
 
 	private func enableNewCollectionButton(anable:Bool){
         performUIUpdatesOnMain {
-			newCollectionButton.isEnabled = anable
+            self.newCollectionButton.isEnabled = anable
 		}
+    }
+    
+    private func haveNoPhotoInfo(display: Bool){
+        performUIUpdatesOnMain {
+            self.infoLabel.isHidden = !display
+        }
     }
     
 	func configureFlow(toTransition : Bool = false){
@@ -130,13 +137,16 @@ class PhotosViewController: UIViewController {
     }
     
 	private func populateCollection(){
-		guard pinHasPhotoOnCoreData(pin: pin) else{
+		guard !pinHasPhotoOnCoreData(pin: pin) else{
 			return
 		}
 		
 		self.enableNewCollectionButton(anable: false)
 		
 		downloadPhotos{(success) in
+            if !success{
+                self.haveNoPhotoInfo(display: true)
+            }
 			self.enableNewCollectionButton(anable: true)
 		}
 	}
@@ -160,6 +170,7 @@ class PhotosViewController: UIViewController {
         FlickrClient.sharedInstance().findPhotosURLByLocation(latitude: pin.latitude, longitude: pin.longitude, radius: 0.1) { (urls, error) in
             guard error == nil else{
 				//TODO: Codificar alerta de erro!
+                completion(false)
                 print ("Error: Could not download photo(s)")
                 return
             }
@@ -168,7 +179,7 @@ class PhotosViewController: UIViewController {
 			
             for url in urls!{
                 if let imageData = try? Data(contentsOf: url){
-                    self.addPhoto(imageData)
+                    self.addPhoto(imageData: imageData)
                 }
             }
 			completion(true)
