@@ -12,17 +12,6 @@ import CoreData
 
 class PhotosViewController: UIViewController {
     
-    //var annotation : MKAnnotation!
-    
-    var pin : Pin!
-    
-    var fetchedResultsController : NSFetchedResultsController<Photo>!
-    
-    @IBOutlet weak var mapView : MKMapView!
-    @IBOutlet weak var collectionView : UICollectionView!
-    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
-    @IBOutlet weak var newCollectionButton: UIBarButtonItem!
-    
     // MARK: - Variables
     
     var selectedIndexes = [IndexPath]()
@@ -30,6 +19,39 @@ class PhotosViewController: UIViewController {
     var deletedIndexPaths: [IndexPath]!
     var updatedIndexPaths: [IndexPath]!
     
+    var pin : Pin!
+    
+    var fetchedResultsController : NSFetchedResultsController<Photo>!
+    
+    
+    //MARK: IBOutlets
+    @IBOutlet weak var mapView : MKMapView!
+    @IBOutlet weak var collectionView : UICollectionView!
+    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
+    @IBOutlet weak var newCollectionButton: UIBarButtonItem!
+ 
+    //MARK: lifeCycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureFlow()
+        
+        collectionView.delegate = self
+        
+        self.hidesBottomBarWhenPushed = false
+        
+        mapView.delegate = self
+        collectionView.dataSource = self
+        addPin()
+        setupFetchedResultsController()
+        
+        print("Pin injetado em PhotoViewControlle:")
+        print(pin)
+        
+        if pinHasPhotoOnCoreData(pin: pin){
+        }else{
+            downLoadPhotos()
+        }
+    }
 
     fileprivate func addPhoto(_ imageData: Data) {
         let photo = Photo(context: DataController.sharedInstance().viewContext)
@@ -65,27 +87,7 @@ class PhotosViewController: UIViewController {
         configureFlow(toTransition: true)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        configureFlow()
-        
-        collectionView.delegate = self
-        
-        self.hidesBottomBarWhenPushed = false
-        
-        mapView.delegate = self
-        collectionView.dataSource = self
-        addPin()
-        setupFetchedResultsController()
-        
-        print("Pin injetado em PhotoViewControlle:")
-        print(pin)
-        
-        if pinHasPhotoOnCoreData(pin: pin){
-        }else{
-            downLoadPhotos()
-        }
-    }
+
     
     private func disableNewCollectionButton(disable:Bool){
         newCollectionButton.isEnabled = !disable
