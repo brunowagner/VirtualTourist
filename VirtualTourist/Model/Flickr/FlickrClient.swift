@@ -22,17 +22,6 @@ class FlickrClient{
 
     func findPhotosURLByLocation(latitude: Double, longitude : Double, radius: Double, completion: @escaping (_ urls : [URL]?, _ error : NSError?)->Void){
         
-//        let parameters : [String : AnyObject] = [
-//            Constants.Flickr.FlickrParameterKeys.APIKey : Constants.Flickr.FlickrParameterValues.APIKey as AnyObject,
-//            Constants.Flickr.FlickrParameterKeys.Method : Constants.Flickr.FlickrParameterValues.SearchMethod as AnyObject ,
-//            Constants.Flickr.FlickrParameterKeys.Latitude : latitude as AnyObject ,
-//            Constants.Flickr.FlickrParameterKeys.Longitude : longitude as AnyObject ,
-//            Constants.Flickr.FlickrParameterKeys.Radius : radius as AnyObject ,
-//            Constants.Flickr.FlickrParameterKeys.Extras : Constants.Flickr.FlickrParameterValues.MediumURL as AnyObject ,
-//            Constants.Flickr.FlickrParameterKeys.Format : Constants.Flickr.FlickrParameterValues.ResponseFormat as AnyObject ,
-//            Constants.Flickr.FlickrParameterKeys.NoJSONCallback : Constants.Flickr.FlickrParameterValues.DisableJSONCallback as AnyObject ,
-//        ]
-        
         requestToGetNumberOfPages(latitude: latitude, longitude: longitude, radius: radius) { (pages, error) in
             guard error == nil else{
                 completion(nil,error)
@@ -41,7 +30,6 @@ class FlickrClient{
             
             //select a random page
             let randomPage = Int(arc4random_uniform(pages!))
-            print(randomPage)
             
             self.requestToGetPhotosUrls(latitude: latitude, longitude: longitude, radius: radius, page: randomPage, completion: { (urls, error) in
                 guard error == nil else{
@@ -52,8 +40,6 @@ class FlickrClient{
                 completion(urls,nil)
             })
         }
-        
-        
     }
     
     private func requestToGetNumberOfPages(latitude: Double, longitude : Double, radius: Double, completion: @escaping (_ UInt32 : UInt32?, _ error : NSError?)->Void){

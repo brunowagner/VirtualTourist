@@ -95,7 +95,7 @@ class PhotosViewController: UIViewController {
         }
     }
     
-    //MARK: - ConfigureUI
+    //MARK: - UI Settings
     private func setDelegatesAndDataSource(){
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -159,7 +159,6 @@ class PhotosViewController: UIViewController {
     //MARK: - Auxiliary functions
     private func pinHasPhotoOnCoreData(pin : Pin) -> Bool{
         guard let itens = pin.photos else {
-            print("Pin.Photos Inválido!")
             return false
         }
         

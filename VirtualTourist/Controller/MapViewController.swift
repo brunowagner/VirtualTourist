@@ -21,25 +21,28 @@ class MapViewController: UIViewController {
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
+        configureMap()
         setupFetchedResultsController()
         loadPinsFromCoreData()
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        <#code#>
-//    }
-//    
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-//        fetchedResultsController = nil
-//    }
+    override func viewWillAppear(_ animated: Bool) {
+        hideNavigationBar(true)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        hideNavigationBar(false)
+    }
     
-    //MARK: - UI setings
-    private func configureUI(){
+    //MARK: - UI Settings
+    private func configureMap(){
         setMapDelegate()
         setMapRegion()
         setLongPress()
+    }
+    
+    private func hideNavigationBar(_ choice: Bool){
+        self.navigationController?.isNavigationBarHidden = choice
     }
     
     private func setMapDelegate(){
