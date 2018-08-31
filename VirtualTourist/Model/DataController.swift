@@ -11,12 +11,14 @@ import CoreData
 
 class DataController{
     
+    //MARK: Properties
     var persistentContainer : NSPersistentContainer
     var viewContext : NSManagedObjectContext {
         return persistentContainer.viewContext
     }
     var backgroundContext: NSManagedObjectContext!
     
+    //MARK: - Methods
     private init(modelName : String){
         self.persistentContainer = NSPersistentContainer(name: modelName)
     }
@@ -69,7 +71,7 @@ class DataController{
     }
 
 
-    // MARK: Shared Instance
+    // MARK: - Shared Instance
     class func  sharedInstance() -> DataController{
         struct Singleton{
             static let sharedInstance = DataController(modelName: "VirtualTourist")

@@ -41,13 +41,6 @@ class Preferences{
         print ("Preferences saved!")
     }
     
-    fileprivate func setCoordinates() {
-        latitude = splittedRegionsDataDictionary["latidude"]
-        longitude = splittedRegionsDataDictionary["longitude"]
-        latDelta = splittedRegionsDataDictionary["latidudeDelta"]
-        longDelta = splittedRegionsDataDictionary["longitudeDelta"]
-    }
-    
     func fetch(){
         
         if let fetchedLocation = UserDefaults.standard.dictionary(forKey: Constants.UserDefaultsKeys.regionPreference) as? [String : Double]{
@@ -65,6 +58,14 @@ class Preferences{
         let span = MKCoordinateSpanMake(latDelta , longDelta )
         
         self.region = MKCoordinateRegionMake(coordinates, span)
+    }
+    
+    
+    fileprivate func setCoordinates() {
+        latitude = splittedRegionsDataDictionary["latidude"]
+        longitude = splittedRegionsDataDictionary["longitude"]
+        latDelta = splittedRegionsDataDictionary["latidudeDelta"]
+        longDelta = splittedRegionsDataDictionary["longitudeDelta"]
     }
     
     // MARK: Shared Instance
