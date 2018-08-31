@@ -173,9 +173,8 @@ class PhotosViewController: UIViewController {
         
         FlickrClient.sharedInstance().findPhotosURLByLocation(latitude: pin.latitude, longitude: pin.longitude, radius: 0.1) { (urls, error) in
             guard error == nil else{
-                //TODO: Codificar alerta de erro!
+                self.treatsDonloadError(error: error)
                 completion(false, 0)
-                print ("Error: Could not download photo(s)")
                 return
             }
             
@@ -185,6 +184,43 @@ class PhotosViewController: UIViewController {
                 }
             }
             completion(true, urls?.count ?? 0)
+        }
+    }
+    
+    func treatsDonloadError(error : NSError?){
+        guard error != nil else{
+            return
+        }
+        let title : String
+        let message: String
+        
+        switch error?.code{
+        case ErrorTreatment.ErrorCode.The_request_timed_out.rawValue:
+            title = "Access to server not possible"
+            message = "Not poosible connect servers!\nVerify your quality Network!"
+            break
+        case ErrorTreatment.ErrorCode.The_Internet_connection_appears_to_be_offline.rawValue:
+            title = "The Internet connection appears to be offline!"
+            message = "\nVerify you connection."
+            break
+        default:
+            title = "Error unknow!"
+            message = "Can not be able to download Photos!"
+            print(error!)
+            break
+        }
+        self.message( view: self, title: title, message: message)
+    }
+    
+    // Standart Alert
+    func message (view: UIViewController ,title:String?, message:String?){
+        performUIUpdatesOnMain {
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            alert.isSpringLoaded = true
+            let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alert.addAction(action)
+            
+            view.present(alert, animated: true, completion: nil)
         }
     }
 }
