@@ -11,7 +11,7 @@ import CoreData
 
 class PhotosViewController: UIViewController {
     
-    // MARK: Variables
+    // MARK: - Variables
     var selectedIndexes = [IndexPath]()
     var insertedIndexPaths: [IndexPath]!
     var deletedIndexPaths: [IndexPath]!
@@ -19,36 +19,41 @@ class PhotosViewController: UIViewController {
     var pin : Pin!
     var fetchedResultsController : NSFetchedResultsController<Photo>!
     
-    //MARK: IBOutlets
+    //MARK: - IBOutlets
     @IBOutlet weak var mapView : MKMapView!
     @IBOutlet weak var collectionView : UICollectionView!
     @IBOutlet weak var infoLabel: UILabel!
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var newCollectionButton: UIBarButtonItem!
- 
-    //MARK: LifeCycle
+    
+    //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         self.haveNoPhotoInfo(display: false)
-		self.configureFlow()
+        self.configureFlow()
         self.setDelegatesAndDataSource()
         self.addPinOnTheMap()
         self.setupFetchedResultsController()
         self.populateCollection()
     }
-
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         configureFlow(toTransition: true)
     }
-	
-	//MARK: IBAction
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        fetchedResultsController = nil
+    }
+    
+    //MARK: - IBAction
     @IBAction func newCollectionAction(sender: UIBarButtonItem){
         self.deletePhotos()
         self.populateCollection()
     }
     
-	//MARK: Editing
-	private func addPhoto(imageData: Data) {
+    //MARK: - Editing
+    private func addPhoto(imageData: Data) {
         let photo = Photo(context: DataController.sharedInstance().viewContext)
         
         photo.photo = imageData
@@ -56,7 +61,7 @@ class PhotosViewController: UIViewController {
         
         try? DataController.sharedInstance().viewContext.save()
     }
-
+    
     private func deletePhotos(){
         for photos in fetchedResultsController.fetchedObjects!{
             DataController.sharedInstance().viewContext.delete(photos)
@@ -64,7 +69,7 @@ class PhotosViewController: UIViewController {
         try? DataController.sharedInstance().viewContext.save()
     }
     
-    //MARK: Setup FetchedResultsController
+    //MARK: - Setup FetchedResultsController
     func setupFetchedResultsController(){
         //Create a fetchRequest (like "SELECT * FROM PHOTO")
         let fetchRequest : NSFetchRequest<Photo> = Photo.fetchRequest()
@@ -89,18 +94,18 @@ class PhotosViewController: UIViewController {
             fatalError("Could not fetched note: \(error.localizedDescription)")
         }
     }
-        
-	//MARK: ConfigureUI
-	private func setDelegatesAndDataSource(){
-		collectionView.delegate = self
-		collectionView.dataSource = self
-		mapView.delegate = self
-	}
-
-	private func enableNewCollectionButton(anable:Bool){
+    
+    //MARK: - ConfigureUI
+    private func setDelegatesAndDataSource(){
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        mapView.delegate = self
+    }
+    
+    private func enableNewCollectionButton(anable:Bool){
         performUIUpdatesOnMain {
             self.newCollectionButton.isEnabled = anable
-		}
+        }
     }
     
     private func haveNoPhotoInfo(display: Bool){
@@ -109,7 +114,7 @@ class PhotosViewController: UIViewController {
         }
     }
     
-	func configureFlow(toTransition : Bool = false){
+    func configureFlow(toTransition : Bool = false){
         let space : CGFloat = 1.0
         let side : CGFloat
         
@@ -118,41 +123,41 @@ class PhotosViewController: UIViewController {
         }else{
             side = (view.frame.size.width - (2 * space)) / 3.0
         }
-
+        
         flowLayout.minimumInteritemSpacing = space
         flowLayout.minimumLineSpacing = space
         flowLayout.itemSize = CGSize(width: side, height: side)
     }
-    	
-	//MARK: Populate
-	fileprivate func addPinOnTheMap() {
+    
+    //MARK: - Populate
+    fileprivate func addPinOnTheMap() {
         let annotation = MKPointAnnotation()
         annotation.coordinate.latitude = pin.latitude
         annotation.coordinate.longitude = pin.longitude
-
+        
         mapView.addAnnotation(annotation)
         let span = MKCoordinateSpanMake(0.001, 0.001)
         let region = MKCoordinateRegionMake(annotation.coordinate, span)
         mapView.region = region
     }
     
-	private func populateCollection(){
-		guard !pinHasPhotoOnCoreData(pin: pin) else{
-			return
-		}
-		
-		self.enableNewCollectionButton(anable: false)
-		
-		downloadPhotos{(success) in
-            if !success{
+    private func populateCollection(){
+        guard !pinHasPhotoOnCoreData(pin: pin) else{
+            return
+        }
+        
+        self.enableNewCollectionButton(anable: false)
+        
+        downloadPhotos{(success, photosCount) in
+            if !success || photosCount == 0{
                 self.haveNoPhotoInfo(display: true)
             }
-			self.enableNewCollectionButton(anable: true)
-		}
-	}
-	
-	//MARK: Auxiliary functions
-	private func pinHasPhotoOnCoreData(pin : Pin) -> Bool{
+            self.enableNewCollectionButton(anable: true)
+        }
+    }
+    
+    //MARK: - Auxiliary functions
+    private func pinHasPhotoOnCoreData(pin : Pin) -> Bool{
         guard let itens = pin.photos else {
             print("Pin.Photos Inválido!")
             return false
@@ -165,28 +170,27 @@ class PhotosViewController: UIViewController {
         }
     }
     
-	fileprivate func downloadPhotos(completion: @escaping (_ success: Bool)->Void) {
+    fileprivate func downloadPhotos(completion: @escaping (_ success: Bool, _ photosCount: Int)->Void) {
         
         FlickrClient.sharedInstance().findPhotosURLByLocation(latitude: pin.latitude, longitude: pin.longitude, radius: 0.1) { (urls, error) in
             guard error == nil else{
-				//TODO: Codificar alerta de erro!
-                completion(false)
+                //TODO: Codificar alerta de erro!
+                completion(false, 0)
                 print ("Error: Could not download photo(s)")
                 return
             }
-			
-			//TODO: Testar cenário onde não existe fotos para download
-			
+            
             for url in urls!{
                 if let imageData = try? Data(contentsOf: url){
                     self.addPhoto(imageData: imageData)
                 }
             }
-			completion(true)
+            completion(true, urls?.count ?? 0)
         }
     }
 }
 
+//MARK: -
 extension PhotosViewController: MKMapViewDelegate{
     
     //MARK: MKMapViewDelegate
@@ -208,11 +212,12 @@ extension PhotosViewController: MKMapViewDelegate{
     }
 }
 
+//MARK: -
 extension PhotosViewController: UICollectionViewDataSource{
     
     //MARK: UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
+        
         let aPhoto = fetchedResultsController.object(at: indexPath)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
         
@@ -231,11 +236,12 @@ extension PhotosViewController: UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return fetchedResultsController.sections?[0].numberOfObjects ?? 0
-        //return (fetchedResultsController.sections?[section].numberOfObjects)!
     }
 }
 
+//MARK: -
 extension PhotosViewController: UICollectionViewDelegate{
+    //MARK: UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let photoToDelete = fetchedResultsController.object(at: indexPath)
@@ -245,6 +251,7 @@ extension PhotosViewController: UICollectionViewDelegate{
     }
 }
 
+//MARK: -
 extension PhotosViewController: NSFetchedResultsControllerDelegate{
     
     //MARK: NSFetchedResultsControllerDelegate
