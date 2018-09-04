@@ -171,16 +171,25 @@ class PhotosViewController: UIViewController {
     
     fileprivate func downloadPhotos(completion: @escaping (_ success: Bool, _ photosCount: Int)->Void) {
         
-        FlickrClient.sharedInstance().findPhotosURLByLocation(latitude: pin.latitude, longitude: pin.longitude, radius: 0.1) { (urls, error) in
+        FlickrClient.sharedInstance().findPhotosURLByLocation(latitude: pin.latitude, longitude: pin.longitude, radius: 1) { (urls, error) in
             guard error == nil else{
                 self.treatsDonloadError(error: error)
                 completion(false, 0)
                 return
             }
             
-            for url in urls!{
+            guard let urlsShuffled = urls?.shuffled() else {
+                completion(false, 0)
+                return
+            }
+            
+            var cont = 0
+            print("Number of Photos finded: \(urlsShuffled.count)")
+            for url in urlsShuffled {
+                if cont == 20 { break }
                 if let imageData = try? Data(contentsOf: url){
                     self.addPhoto(imageData: imageData)
+                    cont += 1
                 }
             }
             completion(true, urls?.count ?? 0)

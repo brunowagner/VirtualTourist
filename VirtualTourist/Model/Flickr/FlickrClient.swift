@@ -14,7 +14,7 @@ class FlickrClient{
         Constants.Flickr.FlickrParameterKeys.Method : Constants.Flickr.FlickrParameterValues.SearchMethod as AnyObject ,
         Constants.Flickr.FlickrParameterKeys.Format : Constants.Flickr.FlickrParameterValues.ResponseFormat as AnyObject ,
         Constants.Flickr.FlickrParameterKeys.NoJSONCallback : Constants.Flickr.FlickrParameterValues.DisableJSONCallback as AnyObject,
-        Constants.Flickr.FlickrParameterKeys.PerPage : 20 as AnyObject
+        Constants.Flickr.FlickrParameterKeys.PerPage : 400 as AnyObject
         ]
     
     let defaultMethod = ""
@@ -22,24 +22,14 @@ class FlickrClient{
 
     func findPhotosURLByLocation(latitude: Double, longitude : Double, radius: Double, completion: @escaping (_ urls : [URL]?, _ error : NSError?)->Void){
         
-        requestToGetNumberOfPages(latitude: latitude, longitude: longitude, radius: radius) { (pages, error) in
+        requestToGetPhotosUrls(latitude: latitude, longitude: longitude, radius: radius, completion: { (urls, error) in
             guard error == nil else{
                 completion(nil,error)
                 return
             }
             
-            //select a random page
-            let randomPage = Int(arc4random_uniform(pages!))
-            
-            self.requestToGetPhotosUrls(latitude: latitude, longitude: longitude, radius: radius, page: randomPage, completion: { (urls, error) in
-                guard error == nil else{
-                    completion(nil,error)
-                    return
-                }
-                
-                completion(urls,nil)
-            })
-        }
+            completion(urls,nil)
+        })
     }
     
     private func requestToGetNumberOfPages(latitude: Double, longitude : Double, radius: Double, completion: @escaping (_ UInt32 : UInt32?, _ error : NSError?)->Void){
@@ -75,7 +65,7 @@ class FlickrClient{
         
     }
     
-    private func requestToGetPhotosUrls(latitude: Double, longitude : Double, radius: Double, page : Int =  0 ,completion: @escaping (_ urls : [URL]?, _ error : NSError?)->Void){
+    private func requestToGetPhotosUrls(latitude: Double, longitude : Double, radius: Double, page : Int =  1 ,completion: @escaping (_ urls : [URL]?, _ error : NSError?)->Void){
         
         var parameters = defaultParametersToSearch
         

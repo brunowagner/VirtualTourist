@@ -15,9 +15,10 @@ struct HTTPTools {
     static func taskForGETMethod(_ method: String, parameters: [String:AnyObject], apiRequirements : ApiRequirements, completionHandlerForGET: @escaping (_ result: AnyObject?, _ error: NSError?) -> Void) -> URLSessionDataTask {
         
         /* 1. Set the parameters */
-        
+        let url = apiRequirements.parseURLFromParameters(parameters, withPathExtension: method)
+
         /* 2/3. Build the URL, Configure the request */
-        var request = NSMutableURLRequest(url: apiRequirements.parseURLFromParameters(parameters, withPathExtension: method))
+        var request = NSMutableURLRequest(url: url)
         apiRequirements.requestConfigToGET(urlRequest: &request)
         
         /* 4. Make the request */
