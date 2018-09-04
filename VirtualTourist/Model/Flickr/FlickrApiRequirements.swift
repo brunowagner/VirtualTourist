@@ -27,9 +27,6 @@ class FlickrApiRequirements: ApiRequirements {
     
     func requestConfigToPOST(urlRequest: inout NSMutableURLRequest, jsonBody: String?) {
         urlRequest.httpMethod = "POST"
-//        urlRequest.addValue("application/json", forHTTPHeaderField: "Accept")
-//        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        urlRequest.httpBody = jsonBody?.data(using: String.Encoding.utf8)
     }
     
     func requestConfigToPUT(urlRequest: inout NSMutableURLRequest, jsonBody: String?) {
@@ -38,21 +35,13 @@ class FlickrApiRequirements: ApiRequirements {
     
     func requestConfigToDELET(urlRequest: inout NSMutableURLRequest) {
         urlRequest.httpMethod = "DELETE"
-//        var xsrfCookie: HTTPCookie? = nil
-//        let sharedCookieStorage = HTTPCookieStorage.shared
-//        for cookie in sharedCookieStorage.cookies! {
-//            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
-//        }
-//        if let xsrfCookie = xsrfCookie {
-//            urlRequest.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
-//        }
     }
     
     func getValidData(data: Data) -> Data {
         return data
     }
-    // MARK: Shared Instance
     
+    // MARK: Shared Instance
     class func sharedInstance() -> FlickrApiRequirements {
         struct Singleton {
             static var sharedInstance = FlickrApiRequirements()

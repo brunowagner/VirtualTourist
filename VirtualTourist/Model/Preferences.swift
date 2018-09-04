@@ -75,7 +75,6 @@ class Preferences{
             static var sharedInstance = Preferences()
         }
         return Singleton.sharedInstance
-    
     }
 }
 

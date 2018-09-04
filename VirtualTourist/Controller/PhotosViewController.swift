@@ -118,9 +118,9 @@ class PhotosViewController: UIViewController {
         let space : CGFloat = 1.0
         let side : CGFloat
         
-        if toTransition{
+        if toTransition {
             side = (view.frame.size.height - (2 * space)) / 3.0
-        }else{
+        } else {
             side = (view.frame.size.width - (2 * space)) / 3.0
         }
         

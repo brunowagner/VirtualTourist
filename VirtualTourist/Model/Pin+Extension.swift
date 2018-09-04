@@ -15,8 +15,6 @@ extension Pin : MKAnnotation{
     }
     
     public var coordinate: CLLocationCoordinate2D {
-        // latitude and longitude are optional NSNumbers
-        
         let latDegrees = CLLocationDegrees(latitude)
         let longDegrees = CLLocationDegrees(longitude)
         
